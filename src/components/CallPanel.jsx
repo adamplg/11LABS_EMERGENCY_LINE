@@ -2,7 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { useConversation } from '@elevenlabs/react';
 import './CallPanel.css';
 
-const AGENT_ID = 'agent_9401kc75qw0ce48bqgwthay53k49';
+// Agent IDs for different callers (cycles through based on call number)
+const CALLER_AGENTS = [
+  'agent_9401kc75qw0ce48bqgwthay53k49', // Caller 1
+  'agent_4501kc76ak52ejgtce1rz8xgnt4g', // Caller 2
+];
 
 const RESPONSE_UNITS = [
   { id: 'ambulance', label: 'Ambulance', icon: '🚑' },
@@ -19,6 +23,7 @@ const SEVERITY_LEVELS = [
 
 export function CallPanel({
   gameState,
+  currentCall,
   onStartCall,
   onEndCall,
   onSubmitDispatch,
@@ -85,9 +90,10 @@ export function CallPanel({
     try {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Start the ElevenLabs conversation
-      console.log('Starting ElevenLabs session...');
-      const session = await conversation.startSession({ agentId: AGENT_ID });
+      // Select agent based on current call number (cycles through available agents)
+      const agentId = CALLER_AGENTS[currentCall % CALLER_AGENTS.length];
+      console.log('Starting ElevenLabs session with agent:', agentId, 'for call:', currentCall);
+      const session = await conversation.startSession({ agentId });
       console.log('ElevenLabs session response:', session);
       console.log('Session type:', typeof session);
       // startSession returns the conversationId directly as a string
@@ -100,7 +106,7 @@ export function CallPanel({
       console.error('Failed to start call:', error);
       alert('Could not start call. Please allow microphone access and try again.');
     }
-  }, [conversation, onStartCall]);
+  }, [conversation, onStartCall, currentCall]);
 
   const handleEndCall = useCallback(async () => {
     try {

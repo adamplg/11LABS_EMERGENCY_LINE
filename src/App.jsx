@@ -106,6 +106,7 @@ function App() {
         {showCallPanel && (
           <CallPanel
             gameState={gameState}
+            currentCall={currentCall}
             onStartCall={handleStartCall}
             onEndCall={handleEndCall}
             onSubmitDispatch={handleSubmitDispatch}
