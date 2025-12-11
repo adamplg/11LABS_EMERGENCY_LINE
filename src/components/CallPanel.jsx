@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useConversation } from '@elevenlabs/react';
 import './CallPanel.css';
+
+const AGENT_ID = 'agent_9401kc75qw0ce48bqgwthay53k49';
 
 const RESPONSE_UNITS = [
   { id: 'ambulance', label: 'Ambulance', icon: '🚑' },
@@ -35,6 +38,69 @@ export function CallPanel({
   });
 
   const [errors, setErrors] = useState({});
+  const [callDuration, setCallDuration] = useState(0);
+
+  // ElevenLabs Conversation hook
+  const conversation = useConversation({
+    onConnect: () => {
+      console.log('Connected to ElevenLabs');
+    },
+    onDisconnect: () => {
+      console.log('Disconnected from ElevenLabs');
+      // Auto-end call when conversation disconnects
+      if (isInCall) {
+        onEndCall();
+      }
+    },
+    onError: (error) => {
+      console.error('ElevenLabs error:', error);
+    },
+    onMessage: (message) => {
+      console.log('Message:', message);
+    },
+  });
+
+  // Call timer
+  useEffect(() => {
+    let interval;
+    if (isInCall) {
+      interval = setInterval(() => {
+        setCallDuration((prev) => prev + 1);
+      }, 1000);
+    } else {
+      setCallDuration(0);
+    }
+    return () => clearInterval(interval);
+  }, [isInCall]);
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleStartCall = useCallback(async () => {
+    resetForm();
+    try {
+      // Request microphone permission
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Start the ElevenLabs conversation
+      await conversation.startSession({ agentId: AGENT_ID });
+      onStartCall();
+    } catch (error) {
+      console.error('Failed to start call:', error);
+      alert('Could not start call. Please allow microphone access and try again.');
+    }
+  }, [conversation, onStartCall]);
+
+  const handleEndCall = useCallback(async () => {
+    try {
+      await conversation.endSession();
+    } catch (error) {
+      console.error('Error ending session:', error);
+    }
+    onEndCall();
+  }, [conversation, onEndCall]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -74,6 +140,9 @@ export function CallPanel({
     setErrors({});
   };
 
+  // Get speaking status
+  const isSpeaking = conversation.isSpeaking;
+
   return (
     <div className="call-panel">
       {/* IDLE STATE */}
@@ -92,7 +161,7 @@ export function CallPanel({
               <em>situation</em>, and <em>severity</em>. Dispatch the right units.
             </p>
 
-            <button className="answer-button" onClick={() => { resetForm(); onStartCall(); }}>
+            <button className="answer-button" onClick={handleStartCall}>
               <span className="btn-dot"></span>
               Answer Incoming Call
             </button>
@@ -112,25 +181,36 @@ export function CallPanel({
             {/* Left: Call Info */}
             <div className="call-info-panel">
               <div className="call-header">
-                <div className="live-badge">
+                <div className={`live-badge ${!isInCall ? 'ended' : ''}`}>
                   <span className="live-dot"></span>
                   {isInCall ? 'LIVE CALL' : 'CALL ENDED'}
                 </div>
-                <span className="call-timer mono">00:00</span>
+                <span className="call-timer mono">{formatTime(callDuration)}</span>
               </div>
 
-              {/* ElevenLabs Widget Placeholder */}
+              {/* Caller visualization */}
               <div className="widget-area">
-                <div id="elevenlabs-widget" className="widget-placeholder">
+                <div className={`caller-display ${isSpeaking ? 'speaking' : ''}`}>
                   <div className="caller-avatar">
                     <span>👤</span>
+                    {isSpeaking && (
+                      <div className="speaking-indicator">
+                        <span className="wave"></span>
+                        <span className="wave"></span>
+                        <span className="wave"></span>
+                      </div>
+                    )}
                   </div>
-                  <p className="widget-label mono">CALLER CONNECTED</p>
+                  <p className="caller-status mono">
+                    {isInCall
+                      ? (isSpeaking ? 'CALLER SPEAKING...' : 'LISTENING...')
+                      : 'CALL DISCONNECTED'}
+                  </p>
                 </div>
               </div>
 
               {isInCall && (
-                <button className="end-call-btn" onClick={onEndCall}>
+                <button className="end-call-btn" onClick={handleEndCall}>
                   End Call
                 </button>
               )}
