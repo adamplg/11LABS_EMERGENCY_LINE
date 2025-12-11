@@ -13,7 +13,7 @@ Emergency Line puts you in the seat of a 911 dispatcher. You'll receive realisti
 - **Realistic Voice Calls**: AI-powered callers with unique scenarios and personalities
 - **Real-time Voice Interaction**: Two-way voice communication using ElevenLabs Conversational AI
 - **Dispatch Report Form**: Document caller name, address, severity, situation, and response units
-- **AI Evaluation**: Get scored on accuracy and response quality using GPT-4
+- **AI Evaluation**: Get scored on accuracy and response quality using GPT-5-nano
 - **Multiple Scenarios**: 4 unique caller scenarios with varying emergencies
 - **Professional UI**: Dark dispatch console aesthetic inspired by real CAD systems
 
@@ -21,7 +21,7 @@ Emergency Line puts you in the seat of a 911 dispatcher. You'll receive realisti
 
 - **Frontend**: React + Vite
 - **Voice AI**: ElevenLabs Conversational AI SDK
-- **Evaluation**: OpenAI GPT-4o-mini
+- **Evaluation**: OpenAI GPT-5-nano
 - **Backend**: Netlify Functions (serverless)
 - **Styling**: CSS with custom properties
 
