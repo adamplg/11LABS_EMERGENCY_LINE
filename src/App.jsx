@@ -36,7 +36,7 @@ function LandingPage({ onSelectSimulation }) {
       <div className="landing-content">
         <div className="landing-header">
           <div className="landing-icon">🎙️</div>
-          <h1 className="landing-title">High-Stakes Conversation Simulator</h1>
+          <h1 className="landing-title">Crisis Core: High-Stakes Conversation Simulator</h1>
           <p className="landing-subtitle">Choose a simulation to begin training</p>
         </div>
 
