@@ -22,35 +22,6 @@ const SEVERITY_LEVELS = [
   { value: 'critical', label: 'Critical' },
 ];
 
-// Fictional Map Component
-function FictionalMap() {
-  return (
-    <div className="fictional-map">
-      {/* Horizontal streets */}
-      <div className="map-street horizontal" style={{ top: '30%' }}>
-        <span className="map-street-label" style={{ top: '-12px', left: '10px' }}>East Ave</span>
-      </div>
-      <div className="map-street horizontal" style={{ top: '70%' }}>
-        <span className="map-street-label" style={{ top: '-12px', left: '10px' }}>Oak St</span>
-      </div>
-
-      {/* Vertical streets */}
-      <div className="map-street vertical" style={{ left: '25%' }}>
-        <span className="map-street-label" style={{ top: '10px', left: '20px' }}>Main St</span>
-      </div>
-      <div className="map-street vertical" style={{ left: '75%' }}>
-        <span className="map-street-label" style={{ top: '10px', left: '20px' }}>2nd Ave</span>
-      </div>
-
-      {/* Location pin */}
-      <div className="map-pin">
-        <span className="map-pin-icon">📍</span>
-        <div className="map-pin-pulse"></div>
-      </div>
-    </div>
-  );
-}
-
 export function CallPanel({
   gameState,
   currentCall,
@@ -352,16 +323,6 @@ export function CallPanel({
                       ))}
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Map Panel */}
-              <div className="map-panel">
-                <div className="panel-header">
-                  <span className="panel-title">Location</span>
-                </div>
-                <div className="map-container">
-                  <FictionalMap />
                 </div>
               </div>
 

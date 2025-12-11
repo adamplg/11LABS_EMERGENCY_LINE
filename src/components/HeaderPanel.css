@@ -59,12 +59,12 @@
 .logo-badge {
   width: 40px;
   height: 40px;
-  background: var(--alert-red);
+  background: #722F37;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 10px var(--alert-red-glow);
+  box-shadow: 0 0 10px rgba(114, 47, 55, 0.5);
 }
 
 .logo-icon {
