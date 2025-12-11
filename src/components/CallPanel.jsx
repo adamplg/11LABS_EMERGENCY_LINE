@@ -53,21 +53,14 @@ export function CallPanel({
 
   // ElevenLabs Conversation hook
   const conversation = useConversation({
-    onConnect: () => {
-      console.log('Connected to ElevenLabs');
-    },
+    onConnect: () => {},
     onDisconnect: () => {
-      console.log('Disconnected from ElevenLabs');
       if (isInCall) {
         onEndCall();
       }
     },
-    onError: (error) => {
-      console.error('ElevenLabs error:', error);
-    },
-    onMessage: (message) => {
-      console.log('Message:', message);
-    },
+    onError: () => {},
+    onMessage: () => {},
   });
 
   // Call timer
@@ -94,16 +87,12 @@ export function CallPanel({
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       const agentId = CALLER_AGENTS[currentCall % CALLER_AGENTS.length];
-      console.log('Starting ElevenLabs session with agent:', agentId, 'for call:', currentCall);
       const session = await conversation.startSession({ agentId });
-      console.log('ElevenLabs session response:', session);
       const conversationId = typeof session === 'string'
         ? session
         : (session?.conversationId || session?.conversation_id || `conv_${Date.now()}`);
-      console.log('Using conversationId:', conversationId);
       onStartCall(conversationId);
     } catch (error) {
-      console.error('Failed to start call:', error);
       alert('Could not start call. Please allow microphone access and try again.');
     }
   }, [conversation, onStartCall, currentCall]);
@@ -112,14 +101,11 @@ export function CallPanel({
   useEffect(() => {
     if (autoStart && isIdle && !autoStartAttempted.current) {
       autoStartAttempted.current = true;
-      // Small delay to ensure conversation hook is ready
       const timer = setTimeout(() => {
-        console.log('Auto-starting call...');
         handleStartCall();
       }, 100);
       return () => clearTimeout(timer);
     }
-    // Reset the ref when autoStart becomes false
     if (!autoStart) {
       autoStartAttempted.current = false;
     }

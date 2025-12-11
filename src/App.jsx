@@ -163,17 +163,11 @@ function App() {
   const handleSubmitDispatch = async (formData) => {
     submitReport();
 
-    console.log('=== SUBMIT DISPATCH ===');
-    console.log('ConversationId from ref:', conversationIdRef.current);
-    console.log('FormData:', formData);
-
     try {
-      // Call the evaluate API
       const requestBody = {
         conversationId: conversationIdRef.current,
         dispatchReport: formData,
       };
-      console.log('Request body:', JSON.stringify(requestBody, null, 2));
 
       const response = await fetch('/.netlify/functions/evaluate', {
         method: 'POST',
@@ -181,20 +175,16 @@ function App() {
         body: JSON.stringify(requestBody),
       });
 
-      console.log('Response status:', response.status);
       const responseText = await response.text();
-      console.log('Response body:', responseText);
 
       if (!response.ok) {
         throw new Error(`Evaluation failed: ${response.status} - ${responseText}`);
       }
 
       const result = JSON.parse(responseText);
-      console.log('Parsed result:', result);
       setLastResult(result);
       recordScore(result.score);
     } catch (error) {
-      console.error('Evaluation error:', error);
       // Fallback to mock result if API fails
       const mockResult = {
         score: 3,
