@@ -273,7 +273,38 @@
   color: var(--success-green);
 }
 
+.call-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.mute-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.mute-btn:hover {
+  border-color: var(--border-active);
+  color: var(--text-primary);
+}
+
+.mute-btn.muted {
+  background: rgba(212, 0, 0, 0.1);
+  border-color: var(--alert-red);
+  color: var(--alert-red);
+}
+
 .end-call-btn {
+  flex: 1;
   padding: 10px 20px;
   background: transparent;
   color: var(--alert-red);

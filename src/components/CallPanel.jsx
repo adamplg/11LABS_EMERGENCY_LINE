@@ -39,6 +39,7 @@ export function CallPanel({
 
   const [errors, setErrors] = useState({});
   const [callDuration, setCallDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
 
   // ElevenLabs Conversation hook
   const conversation = useConversation({
@@ -99,8 +100,19 @@ export function CallPanel({
     } catch (error) {
       console.error('Error ending session:', error);
     }
+    setIsMuted(false);
     onEndCall();
   }, [conversation, onEndCall]);
+
+  const handleMuteToggle = useCallback(async () => {
+    try {
+      const newMuteState = !isMuted;
+      await conversation.setVolume({ inputVolume: newMuteState ? 0 : 1 });
+      setIsMuted(newMuteState);
+    } catch (error) {
+      console.error('Error toggling mute:', error);
+    }
+  }, [conversation, isMuted]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -210,9 +222,19 @@ export function CallPanel({
               </div>
 
               {isInCall && (
-                <button className="end-call-btn" onClick={handleEndCall}>
-                  End Call
-                </button>
+                <div className="call-controls">
+                  <button
+                    className={`mute-btn ${isMuted ? 'muted' : ''}`}
+                    onClick={handleMuteToggle}
+                    title={isMuted ? 'Unmute' : 'Mute'}
+                  >
+                    {isMuted ? '🔇' : '🎤'}
+                    <span>{isMuted ? 'Unmute' : 'Mute'}</span>
+                  </button>
+                  <button className="end-call-btn" onClick={handleEndCall}>
+                    End Call
+                  </button>
+                </div>
               )}
             </div>
 
