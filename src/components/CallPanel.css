@@ -58,6 +58,20 @@
   50% { transform: rotate(10deg); }
 }
 
+/* Connecting state - pulse instead of shake */
+.dispatch-icon.connecting .icon-phone {
+  animation: phonePulse 1s ease-in-out infinite;
+}
+
+.dispatch-icon.connecting .icon-ring {
+  animation: ringPulse 1s ease-out infinite;
+}
+
+@keyframes phonePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+}
+
 .idle-title {
   font-size: 1.25rem;
   font-weight: 700;

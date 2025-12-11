@@ -176,7 +176,7 @@ export function CallPanel({
   return (
     <div className="call-panel">
       {/* IDLE STATE */}
-      {isIdle && (
+      {isIdle && !autoStart && (
         <div className="idle-state fade-in">
           <div className="idle-content">
             <div className="dispatch-icon">
@@ -199,6 +199,29 @@ export function CallPanel({
             <div className="status-indicator">
               <span className="pulse-dot"></span>
               INCOMING CALL
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CONNECTING STATE - Auto-starting next call */}
+      {isIdle && autoStart && (
+        <div className="idle-state fade-in">
+          <div className="idle-content">
+            <div className="dispatch-icon connecting">
+              <span className="icon-ring"></span>
+              <span className="icon-phone">📞</span>
+            </div>
+
+            <h2 className="idle-title">Connecting...</h2>
+
+            <p className="idle-description">
+              Preparing next emergency call
+            </p>
+
+            <div className="status-indicator">
+              <span className="pulse-dot"></span>
+              CONNECTING
             </div>
           </div>
         </div>
