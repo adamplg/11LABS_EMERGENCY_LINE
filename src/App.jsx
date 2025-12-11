@@ -74,8 +74,43 @@ function LandingPage({ onSelectSimulation }) {
   );
 }
 
+function BriefingScreen({ onStart, onBack }) {
+  return (
+    <div className="briefing-page">
+      <div className="briefing-content">
+        <div className="briefing-header">
+          <div className="briefing-icon">🚨</div>
+          <h1 className="briefing-title">Emergency Responder</h1>
+          <p className="briefing-subtitle">911 Dispatch Training Simulation</p>
+        </div>
+
+        <div className="briefing-instructions">
+          <h2>Your Mission</h2>
+          <p>You are a 911 dispatcher. Incoming calls will connect you with people in distress. Your job is to:</p>
+          <ul>
+            <li><strong>Listen carefully</strong> to the caller's situation</li>
+            <li><strong>Ask questions</strong> to gather critical information</li>
+            <li><strong>Document</strong> the caller's name, location, and emergency</li>
+            <li><strong>Dispatch</strong> the appropriate response units</li>
+          </ul>
+          <p className="briefing-note">Stay calm. Every second counts.</p>
+        </div>
+
+        <div className="briefing-actions">
+          <button className="briefing-start-btn" onClick={onStart}>
+            Begin Training
+          </button>
+          <button className="briefing-back-btn" onClick={onBack}>
+            ← Back to Menu
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
-  const [currentScreen, setCurrentScreen] = useState('landing'); // 'landing' or 'game'
+  const [currentScreen, setCurrentScreen] = useState('landing'); // 'landing', 'briefing', or 'game'
 
   const {
     gameState,
@@ -97,8 +132,14 @@ function App() {
 
   const handleSelectSimulation = (simId) => {
     if (simId === 'emergency') {
-      setCurrentScreen('game');
+      setCurrentScreen('briefing');
     }
+  };
+
+  const handleStartFromBriefing = () => {
+    resetSession();
+    setLastResult(null);
+    setCurrentScreen('game');
   };
 
   const handleBackToLanding = () => {
@@ -178,6 +219,15 @@ function App() {
     return (
       <div className="app">
         <LandingPage onSelectSimulation={handleSelectSimulation} />
+      </div>
+    );
+  }
+
+  // Show briefing screen
+  if (currentScreen === 'briefing') {
+    return (
+      <div className="app">
+        <BriefingScreen onStart={handleStartFromBriefing} onBack={handleBackToLanding} />
       </div>
     );
   }
