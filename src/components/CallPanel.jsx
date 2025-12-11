@@ -228,119 +228,44 @@ export function CallPanel({
       {(isInCall || isReportPending || isEvaluating) && (
         <div className="call-state fade-in">
           <div className="call-layout">
-            {/* Left: Red Incident Panel */}
-            <div className="call-info-panel">
-              <div className="incident-header">
-                <span className="incident-title">9-1-1 CALL</span>
-                <span className="cfs-number">CFS: {1000 + currentCall}</span>
-              </div>
-
-              <div className="incident-body">
-                <div className="incident-row">
-                  <span className="incident-label">Call Type:</span>
-                  <span className="incident-value">EMRG</span>
-                </div>
-                <div className="incident-row">
-                  <span className="incident-label">Priority:</span>
-                  <span className="incident-value">
-                    {formData.severity === 'critical' ? '1' : formData.severity === 'serious' ? '2' : formData.severity ? '3' : '--'}
-                  </span>
-                </div>
-                <div className="incident-row">
-                  <span className="incident-label">Tel:</span>
-                  <span className="incident-value">555-{String(Math.floor(Math.random() * 9000) + 1000)}</span>
-                </div>
-
-                <div className="incident-description">
-                  <span className="incident-label">Description</span>
-                  <span className="incident-value">
-                    {formData.situation || 'Awaiting caller information...'}
-                  </span>
-                </div>
-              </div>
-
-              {/* Call Status Section */}
-              <div className="call-status-section">
-                <div className="call-header">
+            {/* Main Content Area */}
+            <div className="main-content-area">
+              {/* Call Status Bar */}
+              <div className="call-status-bar">
+                <div className="status-left">
                   <div className={`live-badge ${!isInCall ? 'ended' : ''}`}>
                     <span className="live-dot"></span>
                     {isInCall ? 'LIVE' : 'ENDED'}
                   </div>
                   <span className="call-timer">{formatTime(callDuration)}</span>
-                </div>
-
-                <div className={`caller-display ${isSpeaking ? 'speaking' : ''}`}>
-                  <div className="caller-avatar">
-                    <span>👤</span>
+                  <div className={`caller-status-inline ${isSpeaking ? 'speaking' : ''}`}>
                     {isSpeaking && (
-                      <div className="speaking-indicator">
+                      <div className="speaking-indicator-inline">
                         <span className="wave"></span>
                         <span className="wave"></span>
                         <span className="wave"></span>
                       </div>
                     )}
-                  </div>
-                  <div className="caller-info">
-                    <p className="caller-status">
+                    <span>
                       {isInCall
-                        ? (isSpeaking ? 'CALLER SPEAKING...' : 'LISTENING...')
+                        ? (isSpeaking ? 'CALLER SPEAKING' : 'LISTENING')
                         : 'DISCONNECTED'}
-                    </p>
+                    </span>
                   </div>
                 </div>
-
                 {isInCall && (
-                  <div className="call-controls">
+                  <div className="status-right">
                     <button
                       className={`mute-btn ${isMuted ? 'muted' : ''}`}
                       onClick={handleMuteToggle}
                     >
                       {isMuted ? '🔇' : '🎤'}
-                      <span>{isMuted ? 'Unmute' : 'Mute'}</span>
                     </button>
                     <button className="end-call-btn" onClick={handleEndCall}>
                       End Call
                     </button>
                   </div>
                 )}
-              </div>
-            </div>
-
-            {/* Right: Main Content Area */}
-            <div className="main-content-area">
-              {/* Active Incident Info */}
-              <div className="active-incident-panel">
-                <div className="panel-header">
-                  <span className="panel-title">Active Incident</span>
-                </div>
-                <div className="panel-body">
-                  <div className="incident-grid">
-                    <div className="info-group">
-                      <span className="info-label">Caller Name</span>
-                      <span className="info-value">{formData.callerName || '---'}</span>
-                    </div>
-                    <div className="info-group">
-                      <span className="info-label">Priority</span>
-                      <span className="info-value large">
-                        {formData.severity === 'critical' ? '1' : formData.severity === 'serious' ? '2' : formData.severity ? '3' : '-'}
-                      </span>
-                    </div>
-                    <div className="info-group" style={{ gridColumn: '1 / -1' }}>
-                      <span className="info-label">Location</span>
-                      <span className="info-value">{formData.address || '---'}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Map Panel */}
-              <div className="map-panel">
-                <div className="panel-header">
-                  <span className="panel-title">Location</span>
-                </div>
-                <div className="map-container">
-                  <FictionalMap />
-                </div>
               </div>
 
               {/* Dispatch Form */}
@@ -427,6 +352,16 @@ export function CallPanel({
                       ))}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Map Panel */}
+              <div className="map-panel">
+                <div className="panel-header">
+                  <span className="panel-title">Location</span>
+                </div>
+                <div className="map-container">
+                  <FictionalMap />
                 </div>
               </div>
 
