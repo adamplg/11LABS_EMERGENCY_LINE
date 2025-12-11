@@ -27,6 +27,7 @@ export function CallPanel({
   const isEvaluating = gameState === 'evaluating';
 
   const [formData, setFormData] = useState({
+    callerName: '',
     address: '',
     severity: '',
     situation: '',
@@ -53,6 +54,7 @@ export function CallPanel({
 
   const validate = () => {
     const newErrors = {};
+    if (!formData.callerName.trim()) newErrors.callerName = 'Required';
     if (!formData.address.trim()) newErrors.address = 'Required';
     if (!formData.severity) newErrors.severity = 'Required';
     if (!formData.situation.trim()) newErrors.situation = 'Required';
@@ -68,7 +70,7 @@ export function CallPanel({
   };
 
   const resetForm = () => {
-    setFormData({ address: '', severity: '', situation: '', units: [] });
+    setFormData({ callerName: '', address: '', severity: '', situation: '', units: [] });
     setErrors({});
   };
 
@@ -137,6 +139,19 @@ export function CallPanel({
             {/* Right: Dispatch Form */}
             <div className="dispatch-form-panel">
               <h3 className="form-title">Dispatch Report</h3>
+
+              <div className="form-field">
+                <label>Caller Name</label>
+                <input
+                  type="text"
+                  name="callerName"
+                  placeholder="Name of the caller..."
+                  value={formData.callerName}
+                  onChange={handleInputChange}
+                  disabled={isEvaluating}
+                  className={errors.callerName ? 'error' : ''}
+                />
+              </div>
 
               <div className="form-field">
                 <label>Emergency Address</label>
