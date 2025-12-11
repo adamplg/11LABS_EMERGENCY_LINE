@@ -1,19 +1,27 @@
 import './HeaderPanel.css';
 
-export function HeaderPanel({ currentCall, totalCalls, gameState }) {
+export function HeaderPanel({ currentCall, totalCalls, gameState, onReset }) {
+  const handleHomeClick = () => {
+    if (gameState !== 'idle') {
+      onReset?.();
+    }
+  };
+
   return (
     <header className="header-panel">
       <div className="header-content">
         <div className="header-left">
-          <div className="logo">
+          <button className="logo" onClick={handleHomeClick} title="Return to home">
             <span className="logo-icon">☎</span>
             <span className="logo-text">911</span>
-          </div>
+          </button>
         </div>
 
         <div className="header-center">
-          <h1 className="title">Emergency Line</h1>
-          <p className="subtitle">Take a Call. Save a Life.</p>
+          <button className="title-btn" onClick={handleHomeClick} title="Return to home">
+            <h1 className="title">Emergency Line</h1>
+            <p className="subtitle">Take a Call. Save a Life.</p>
+          </button>
         </div>
 
         <div className="header-right">

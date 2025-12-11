@@ -70,6 +70,7 @@ function App() {
         currentCall={currentCall}
         totalCalls={totalCalls}
         gameState={gameState}
+        onReset={handleRestart}
       />
 
       <main className="main-content">
