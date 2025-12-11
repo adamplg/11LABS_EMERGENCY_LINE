@@ -173,17 +173,7 @@ export function CallPanel({
   };
 
   const handleSubmit = () => {
-    console.log('Submit button clicked');
-    console.log('gameState:', gameState);
-    console.log('isInCall:', isInCall);
-    console.log('isEvaluating:', isEvaluating);
-    console.log('formData:', formData);
-
-    const isValid = validate();
-    console.log('Validation result:', isValid);
-    console.log('Errors:', errors);
-
-    if (isValid) {
+    if (validate()) {
       onSubmitDispatch(formData);
     }
   };
@@ -400,10 +390,6 @@ export function CallPanel({
                   'Submit Dispatch Report'
                 )}
               </button>
-              {/* Debug info - remove after testing */}
-              <div style={{ fontSize: '10px', color: '#666', marginTop: '4px', textAlign: 'center' }}>
-                [Debug: gameState={gameState}, disabled={String(isInCall || isEvaluating)}]
-              </div>
             </div>
           </div>
         </div>
