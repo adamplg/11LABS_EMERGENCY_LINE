@@ -6,13 +6,14 @@ import './CallPanel.css';
 const CALLER_AGENTS = [
   'agent_9401kc75qw0ce48bqgwthay53k49', // Caller 1
   'agent_4501kc76ak52ejgtce1rz8xgnt4g', // Caller 2
+  'agent_5201kc79m6nzem2a6gs7aagsp8xn', // Caller 3
 ];
 
 const RESPONSE_UNITS = [
   { id: 'ambulance', label: 'Ambulance', icon: '🚑' },
   { id: 'police', label: 'Police', icon: '🚔' },
-  { id: 'fire', label: 'Fire Department', icon: '🚒' },
-  { id: 'animal', label: 'Animal Control', icon: '🐕' },
+  { id: 'fire', label: 'Fire Dept', icon: '🚒' },
+  { id: 'animal', label: 'Animal Ctrl', icon: '🐕' },
 ];
 
 const SEVERITY_LEVELS = [
@@ -20,6 +21,35 @@ const SEVERITY_LEVELS = [
   { value: 'serious', label: 'Serious' },
   { value: 'critical', label: 'Critical' },
 ];
+
+// Fictional Map Component
+function FictionalMap() {
+  return (
+    <div className="fictional-map">
+      {/* Horizontal streets */}
+      <div className="map-street horizontal" style={{ top: '30%' }}>
+        <span className="map-street-label" style={{ top: '-12px', left: '10px' }}>East Ave</span>
+      </div>
+      <div className="map-street horizontal" style={{ top: '70%' }}>
+        <span className="map-street-label" style={{ top: '-12px', left: '10px' }}>Oak St</span>
+      </div>
+
+      {/* Vertical streets */}
+      <div className="map-street vertical" style={{ left: '25%' }}>
+        <span className="map-street-label" style={{ top: '10px', left: '20px' }}>Main St</span>
+      </div>
+      <div className="map-street vertical" style={{ left: '75%' }}>
+        <span className="map-street-label" style={{ top: '10px', left: '20px' }}>2nd Ave</span>
+      </div>
+
+      {/* Location pin */}
+      <div className="map-pin">
+        <span className="map-pin-icon">📍</span>
+        <div className="map-pin-pulse"></div>
+      </div>
+    </div>
+  );
+}
 
 export function CallPanel({
   gameState,
@@ -53,7 +83,6 @@ export function CallPanel({
     },
     onDisconnect: () => {
       console.log('Disconnected from ElevenLabs');
-      // Auto-end call when conversation disconnects
       if (isInCall) {
         onEndCall();
       }
@@ -88,15 +117,11 @@ export function CallPanel({
   const handleStartCall = useCallback(async () => {
     resetForm();
     try {
-      // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Select agent based on current call number (cycles through available agents)
       const agentId = CALLER_AGENTS[currentCall % CALLER_AGENTS.length];
       console.log('Starting ElevenLabs session with agent:', agentId, 'for call:', currentCall);
       const session = await conversation.startSession({ agentId });
       console.log('ElevenLabs session response:', session);
-      console.log('Session type:', typeof session);
-      // startSession returns the conversationId directly as a string
       const conversationId = typeof session === 'string'
         ? session
         : (session?.conversationId || session?.conversation_id || `conv_${Date.now()}`);
@@ -166,7 +191,6 @@ export function CallPanel({
     setErrors({});
   };
 
-  // Get speaking status
   const isSpeaking = conversation.isSpeaking;
 
   return (
@@ -180,10 +204,10 @@ export function CallPanel({
               <span className="icon-phone">📞</span>
             </div>
 
-            <h2 className="idle-title">Emergency Dispatch Training</h2>
+            <h2 className="idle-title">9-1-1 Call</h2>
 
             <p className="idle-description">
-              Listen to the caller. Stay calm. Extract the <em>location</em>,
+              Listen to the caller. Stay calm. Extract the <em>location</em>,{' '}
               <em>situation</em>, and <em>severity</em>. Dispatch the right units.
             </p>
 
@@ -192,7 +216,7 @@ export function CallPanel({
               Answer Incoming Call
             </button>
 
-            <div className="status-indicator mono">
+            <div className="status-indicator">
               <span className="pulse-dot"></span>
               INCOMING CALL
             </div>
@@ -204,18 +228,47 @@ export function CallPanel({
       {(isInCall || isReportPending || isEvaluating) && (
         <div className="call-state fade-in">
           <div className="call-layout">
-            {/* Left: Call Info */}
+            {/* Left: Red Incident Panel */}
             <div className="call-info-panel">
-              <div className="call-header">
-                <div className={`live-badge ${!isInCall ? 'ended' : ''}`}>
-                  <span className="live-dot"></span>
-                  {isInCall ? 'LIVE CALL' : 'CALL ENDED'}
-                </div>
-                <span className="call-timer mono">{formatTime(callDuration)}</span>
+              <div className="incident-header">
+                <span className="incident-title">9-1-1 CALL</span>
+                <span className="cfs-number">CFS: {1000 + currentCall}</span>
               </div>
 
-              {/* Caller visualization */}
-              <div className="widget-area">
+              <div className="incident-body">
+                <div className="incident-row">
+                  <span className="incident-label">Call Type:</span>
+                  <span className="incident-value">EMRG</span>
+                </div>
+                <div className="incident-row">
+                  <span className="incident-label">Priority:</span>
+                  <span className="incident-value">
+                    {formData.severity === 'critical' ? '1' : formData.severity === 'serious' ? '2' : formData.severity ? '3' : '--'}
+                  </span>
+                </div>
+                <div className="incident-row">
+                  <span className="incident-label">Tel:</span>
+                  <span className="incident-value">555-{String(Math.floor(Math.random() * 9000) + 1000)}</span>
+                </div>
+
+                <div className="incident-description">
+                  <span className="incident-label">Description</span>
+                  <span className="incident-value">
+                    {formData.situation || 'Awaiting caller information...'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Call Status Section */}
+              <div className="call-status-section">
+                <div className="call-header">
+                  <div className={`live-badge ${!isInCall ? 'ended' : ''}`}>
+                    <span className="live-dot"></span>
+                    {isInCall ? 'LIVE' : 'ENDED'}
+                  </div>
+                  <span className="call-timer">{formatTime(callDuration)}</span>
+                </div>
+
                 <div className={`caller-display ${isSpeaking ? 'speaking' : ''}`}>
                   <div className="caller-avatar">
                     <span>👤</span>
@@ -227,115 +280,175 @@ export function CallPanel({
                       </div>
                     )}
                   </div>
-                  <p className="caller-status mono">
-                    {isInCall
-                      ? (isSpeaking ? 'CALLER SPEAKING...' : 'LISTENING...')
-                      : 'CALL DISCONNECTED'}
-                  </p>
+                  <div className="caller-info">
+                    <p className="caller-status">
+                      {isInCall
+                        ? (isSpeaking ? 'CALLER SPEAKING...' : 'LISTENING...')
+                        : 'DISCONNECTED'}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {isInCall && (
-                <div className="call-controls">
-                  <button
-                    className={`mute-btn ${isMuted ? 'muted' : ''}`}
-                    onClick={handleMuteToggle}
-                    title={isMuted ? 'Unmute' : 'Mute'}
-                  >
-                    {isMuted ? '🔇' : '🎤'}
-                    <span>{isMuted ? 'Unmute' : 'Mute'}</span>
-                  </button>
-                  <button className="end-call-btn" onClick={handleEndCall}>
-                    End Call
-                  </button>
-                </div>
-              )}
+                {isInCall && (
+                  <div className="call-controls">
+                    <button
+                      className={`mute-btn ${isMuted ? 'muted' : ''}`}
+                      onClick={handleMuteToggle}
+                    >
+                      {isMuted ? '🔇' : '🎤'}
+                      <span>{isMuted ? 'Unmute' : 'Mute'}</span>
+                    </button>
+                    <button className="end-call-btn" onClick={handleEndCall}>
+                      End Call
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Right: Dispatch Form */}
-            <div className="dispatch-form-panel">
-              <h3 className="form-title">Dispatch Report</h3>
-
-              <div className="form-field">
-                <label>Caller Name</label>
-                <input
-                  type="text"
-                  name="callerName"
-                  placeholder="Name of the caller..."
-                  value={formData.callerName}
-                  onChange={handleInputChange}
-                  disabled={isEvaluating}
-                  className={errors.callerName ? 'error' : ''}
-                />
-              </div>
-
-              <div className="form-field">
-                <label>Emergency Address</label>
-                <input
-                  type="text"
-                  name="address"
-                  placeholder="Street, number, city..."
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  disabled={isEvaluating}
-                  className={errors.address ? 'error' : ''}
-                />
-              </div>
-
-              <div className="form-field">
-                <label>Severity</label>
-                <div className="severity-buttons">
-                  {SEVERITY_LEVELS.map((level) => (
-                    <button
-                      key={level.value}
-                      type="button"
-                      className={`severity-btn ${level.value} ${formData.severity === level.value ? 'active' : ''}`}
-                      onClick={() => {
-                        setFormData((prev) => ({ ...prev, severity: level.value }));
-                        if (errors.severity) setErrors((prev) => ({ ...prev, severity: null }));
-                      }}
-                      disabled={isEvaluating}
-                    >
-                      {level.label}
-                    </button>
-                  ))}
+            {/* Right: Main Content Area */}
+            <div className="main-content-area">
+              {/* Active Incident Info */}
+              <div className="active-incident-panel">
+                <div className="panel-header">
+                  <span className="panel-title">Active Incident</span>
                 </div>
-                {errors.severity && <span className="error-msg">{errors.severity}</span>}
-              </div>
-
-              <div className="form-field">
-                <label>Situation</label>
-                <textarea
-                  name="situation"
-                  placeholder="What's happening..."
-                  value={formData.situation}
-                  onChange={handleInputChange}
-                  disabled={isEvaluating}
-                  className={errors.situation ? 'error' : ''}
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-field">
-                <label>Dispatch Units</label>
-                <div className="units-grid">
-                  {RESPONSE_UNITS.map((unit) => (
-                    <button
-                      key={unit.id}
-                      type="button"
-                      className={`unit-btn ${formData.units.includes(unit.id) ? 'active' : ''}`}
-                      onClick={() => handleUnitToggle(unit.id)}
-                      disabled={isEvaluating}
-                    >
-                      <span className="unit-icon">{unit.icon}</span>
-                      <span className="unit-label">{unit.label}</span>
-                      {formData.units.includes(unit.id) && <span className="unit-check">✓</span>}
-                    </button>
-                  ))}
+                <div className="panel-body">
+                  <div className="incident-grid">
+                    <div className="info-group">
+                      <span className="info-label">Caller Name</span>
+                      <span className="info-value">{formData.callerName || '---'}</span>
+                    </div>
+                    <div className="info-group">
+                      <span className="info-label">Priority</span>
+                      <span className="info-value large">
+                        {formData.severity === 'critical' ? '1' : formData.severity === 'serious' ? '2' : formData.severity ? '3' : '-'}
+                      </span>
+                    </div>
+                    <div className="info-group" style={{ gridColumn: '1 / -1' }}>
+                      <span className="info-label">Location</span>
+                      <span className="info-value">{formData.address || '---'}</span>
+                    </div>
+                  </div>
                 </div>
-                {errors.units && <span className="error-msg">{errors.units}</span>}
               </div>
 
+              {/* Map Panel */}
+              <div className="map-panel">
+                <div className="panel-header">
+                  <span className="panel-title">Location</span>
+                </div>
+                <div className="map-container">
+                  <FictionalMap />
+                </div>
+              </div>
+
+              {/* Dispatch Form */}
+              <div className="dispatch-form-panel">
+                <div className="panel-header">
+                  <span className="panel-title">Dispatch Report</span>
+                </div>
+                <div className="form-body">
+                  <div className="form-row">
+                    <div className="form-field">
+                      <label>Caller Name</label>
+                      <input
+                        type="text"
+                        name="callerName"
+                        placeholder="Name..."
+                        value={formData.callerName}
+                        onChange={handleInputChange}
+                        disabled={isEvaluating}
+                        className={errors.callerName ? 'error' : ''}
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>Severity</label>
+                      <div className="severity-buttons">
+                        {SEVERITY_LEVELS.map((level) => (
+                          <button
+                            key={level.value}
+                            type="button"
+                            className={`severity-btn ${level.value} ${formData.severity === level.value ? 'active' : ''}`}
+                            onClick={() => {
+                              setFormData((prev) => ({ ...prev, severity: level.value }));
+                              if (errors.severity) setErrors((prev) => ({ ...prev, severity: null }));
+                            }}
+                            disabled={isEvaluating}
+                          >
+                            {level.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-field full-width">
+                    <label>Emergency Address</label>
+                    <input
+                      type="text"
+                      name="address"
+                      placeholder="Street, number, city..."
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      disabled={isEvaluating}
+                      className={errors.address ? 'error' : ''}
+                    />
+                  </div>
+
+                  <div className="form-field full-width">
+                    <label>Situation</label>
+                    <textarea
+                      name="situation"
+                      placeholder="What's happening..."
+                      value={formData.situation}
+                      onChange={handleInputChange}
+                      disabled={isEvaluating}
+                      className={errors.situation ? 'error' : ''}
+                      rows={2}
+                    />
+                  </div>
+
+                  <div className="form-field full-width">
+                    <label>Dispatch Units</label>
+                    <div className="units-grid">
+                      {RESPONSE_UNITS.map((unit) => (
+                        <button
+                          key={unit.id}
+                          type="button"
+                          className={`unit-btn ${formData.units.includes(unit.id) ? 'active' : ''}`}
+                          onClick={() => handleUnitToggle(unit.id)}
+                          disabled={isEvaluating}
+                        >
+                          <span className="unit-icon">{unit.icon}</span>
+                          <span className="unit-label">{unit.label}</span>
+                          {formData.units.includes(unit.id) && <span className="unit-check">✓</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Row */}
+              <div className="status-row">
+                <div className="status-item">
+                  <div className="status-label">Status</div>
+                  <div className={`status-value ${!isInCall && formData.units.length > 0 ? 'responding' : ''}`}>
+                    {isInCall ? 'IN PROGRESS' : formData.units.length > 0 ? 'RESPONDING' : 'PENDING'}
+                  </div>
+                </div>
+                <div className="status-item">
+                  <div className="status-label">Units</div>
+                  <div className="status-value">{formData.units.length || '-'}</div>
+                </div>
+                <div className="status-item">
+                  <div className="status-label">Duration</div>
+                  <div className="status-value">{formatTime(callDuration)}</div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
               <button
                 className="submit-btn"
                 onClick={handleSubmit}
@@ -349,7 +462,7 @@ export function CallPanel({
                 ) : isInCall ? (
                   'End call to submit'
                 ) : (
-                  'Submit Dispatch'
+                  'Submit Dispatch Report'
                 )}
               </button>
             </div>

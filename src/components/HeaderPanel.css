@@ -1,7 +1,8 @@
+/* Header Panel - CAD Console Style */
 .header-panel {
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-dim);
-  padding: 16px 24px;
+  padding: 12px 24px;
   position: relative;
 }
 
@@ -9,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -20,7 +21,7 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   background: none;
   border: none;
   padding: 0;
@@ -32,16 +33,42 @@
   opacity: 0.8;
 }
 
+.logo-badge {
+  width: 40px;
+  height: 40px;
+  background: var(--alert-red);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px var(--alert-red-glow);
+}
+
 .logo-icon {
-  font-size: 1.5rem;
-  filter: grayscale(1);
+  font-size: 1.25rem;
+  filter: grayscale(1) brightness(2);
+}
+
+.logo-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
 }
 
 .logo-text {
-  font-size: 1.25rem;
+  font-size: 0.9rem;
   font-weight: 800;
-  color: var(--alert-red);
+  color: var(--text-primary);
   letter-spacing: 2px;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 1px;
 }
 
 .header-center {
@@ -62,18 +89,19 @@
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
-  letter-spacing: 1px;
+  letter-spacing: 3px;
 }
 
 .subtitle {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+  font-size: 0.6875rem;
+  color: var(--text-muted);
   margin: 4px 0 0 0;
-  letter-spacing: 0.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .header-right {
@@ -81,32 +109,84 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 16px;
+  gap: 12px;
 }
 
-.call-counter {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+/* Header Stats */
+.header-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   background: var(--bg-panel);
   padding: 6px 12px;
   border-radius: var(--button-radius);
   border: 1px solid var(--border-dim);
 }
 
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.stat-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--info-blue);
+}
+
+.stat-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-dim);
+}
+
+.call-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  background: var(--bg-panel);
+  padding: 6px 12px;
+  border-radius: var(--button-radius);
+  border: 1px solid var(--border-dim);
+}
+
+.counter-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.counter-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--warning-yellow);
+}
+
 .live-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(212, 0, 0, 0.15);
-  padding: 6px 12px;
+  background: var(--alert-red);
+  padding: 8px 14px;
   border-radius: var(--button-radius);
-  border: 1px solid var(--alert-red-dim);
+  animation: glow 2s ease-in-out infinite;
 }
 
 .live-dot {
   width: 8px;
   height: 8px;
-  background: var(--alert-red);
+  background: #fff;
   border-radius: 50%;
   animation: blink 1s infinite;
 }
@@ -114,7 +194,7 @@
 .live-text {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--alert-red);
+  color: #fff;
   letter-spacing: 1px;
 }
 
@@ -127,12 +207,18 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--alert-red-dim) 20%,
-    var(--alert-red) 50%,
-    var(--alert-red-dim) 80%,
+    var(--info-blue-dim) 20%,
+    var(--info-blue) 50%,
+    var(--info-blue-dim) 80%,
     transparent 100%
   );
-  opacity: 0.6;
+  opacity: 0.5;
+}
+
+@media (max-width: 900px) {
+  .header-stats {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -146,7 +232,11 @@
     justify-content: center;
   }
 
+  .logo-info {
+    display: none;
+  }
+
   .title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 }

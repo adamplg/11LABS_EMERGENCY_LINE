@@ -1,33 +1,38 @@
-/* Emergency Console Global Styles */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Emergency Dispatch Console - Professional CAD Style */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Core colors */
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #111111;
-  --bg-panel: #1a1a1a;
-  --bg-input: #0d0d0d;
+  /* Core colors - Dark Navy Theme */
+  --bg-primary: #0a1628;
+  --bg-secondary: #0d1a2d;
+  --bg-panel: #122035;
+  --bg-input: #0a1628;
+  --bg-card: #1a2d47;
 
   /* Alert colors */
-  --alert-red: #d40000;
-  --alert-red-glow: rgba(212, 0, 0, 0.4);
-  --alert-red-dim: #8b0000;
-  --warning-yellow: #ffcc00;
-  --success-green: #0aff0a;
-  --info-blue: #00a8ff;
+  --alert-red: #8b1538;
+  --alert-red-bright: #c41e3a;
+  --alert-red-glow: rgba(139, 21, 56, 0.4);
+  --alert-red-dim: #5a0f25;
+  --warning-yellow: #d4a84b;
+  --success-green: #2ed573;
+  --info-blue: #4a9eff;
+  --info-blue-dim: #2a5a8f;
 
   /* Text colors */
-  --text-primary: #e0e0e0;
-  --text-secondary: #888888;
-  --text-muted: #555555;
+  --text-primary: #e8edf5;
+  --text-secondary: #8fa3bf;
+  --text-muted: #4a6280;
+  --text-label: #6b8299;
 
   /* Borders */
-  --border-dim: #2a2a2a;
-  --border-active: #3a3a3a;
+  --border-dim: #1e3a5f;
+  --border-active: #2a4a7f;
+  --border-panel: #1a3050;
 
   /* Sizing */
-  --panel-radius: 8px;
-  --button-radius: 4px;
+  --panel-radius: 4px;
+  --button-radius: 2px;
 }
 
 * {
@@ -42,34 +47,15 @@ html, body, #root {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.5;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scanline overlay effect */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.1) 0px,
-    rgba(0, 0, 0, 0.1) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  z-index: 9999;
-}
-
-/* Grid background effect */
+/* Subtle grid background */
 body::after {
   content: '';
   position: fixed;
@@ -79,9 +65,9 @@ body::after {
   height: 100%;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 50px 50px;
+    linear-gradient(rgba(74, 158, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 158, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
   z-index: -1;
 }
 
@@ -92,52 +78,32 @@ body::after {
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 @keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 @keyframes glow {
   0%, 100% {
-    box-shadow: 0 0 20px var(--alert-red-glow), 0 0 40px var(--alert-red-glow);
+    box-shadow: 0 0 10px var(--alert-red-glow);
   }
   50% {
-    box-shadow: 0 0 30px var(--alert-red-glow), 0 0 60px var(--alert-red-glow), 0 0 80px var(--alert-red-glow);
+    box-shadow: 0 0 20px var(--alert-red-glow), 0 0 30px var(--alert-red-glow);
   }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .fade-in {
@@ -150,21 +116,21 @@ body::after {
 
 /* Form elements */
 input, textarea, select {
-  font-family: inherit;
-  font-size: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
   background: var(--bg-input);
   border: 1px solid var(--border-dim);
   border-radius: var(--button-radius);
   color: var(--text-primary);
-  padding: 12px 16px;
+  padding: 8px 12px;
   width: 100%;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--alert-red);
-  box-shadow: 0 0 0 2px var(--alert-red-glow);
+  border-color: var(--info-blue);
+  box-shadow: 0 0 0 1px var(--info-blue-dim);
 }
 
 input::placeholder, textarea::placeholder {
@@ -174,7 +140,7 @@ input::placeholder, textarea::placeholder {
 select {
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b8299' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 36px;
@@ -182,27 +148,29 @@ select {
 
 textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 80px;
 }
 
 label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-label);
+  margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 /* Button base */
 button {
-  font-family: inherit;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 600;
   cursor: pointer;
   border: none;
   border-radius: var(--button-radius);
-  transition: all 0.2s;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 button:disabled {
@@ -212,8 +180,8 @@ button:disabled {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -222,7 +190,7 @@ button:disabled {
 
 ::-webkit-scrollbar-thumb {
   background: var(--border-active);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
