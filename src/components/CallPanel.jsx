@@ -86,8 +86,10 @@ export function CallPanel({
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
       // Start the ElevenLabs conversation
-      await conversation.startSession({ agentId: AGENT_ID });
-      onStartCall();
+      const session = await conversation.startSession({ agentId: AGENT_ID });
+      // Pass the conversationId to the parent
+      const conversationId = session?.conversationId || `conv_${Date.now()}`;
+      onStartCall(conversationId);
     } catch (error) {
       console.error('Failed to start call:', error);
       alert('Could not start call. Please allow microphone access and try again.');

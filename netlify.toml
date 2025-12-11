@@ -1,8 +1,18 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  functions = "netlify/functions"
 
-# SPA routing - redirect all paths to index.html
+[functions]
+  node_bundler = "esbuild"
+
+# API routes should not be redirected
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# SPA routing - redirect all other paths to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"

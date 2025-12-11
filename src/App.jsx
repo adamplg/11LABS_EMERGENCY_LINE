@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useEmergencySession } from './hooks/useEmergencySession';
 import { HeaderPanel } from './components/HeaderPanel';
 import { CallPanel } from './components/CallPanel';
@@ -22,11 +22,12 @@ function App() {
   } = useEmergencySession();
 
   const [lastResult, setLastResult] = useState(null);
+  const conversationIdRef = useRef(null);
 
-  const handleStartCall = () => {
-    const conversationId = `conv_${Date.now()}`;
+  const handleStartCall = (elevenLabsConversationId) => {
+    conversationIdRef.current = elevenLabsConversationId;
     const scenarioId = `scenario_${currentCall + 1}`;
-    startCall(conversationId, scenarioId);
+    startCall(elevenLabsConversationId, scenarioId);
   };
 
   const handleEndCall = () => {
@@ -36,19 +37,35 @@ function App() {
   const handleSubmitDispatch = async (formData) => {
     submitReport();
 
-    // TODO: Replace with actual API call to /api/evaluate
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // Call the evaluate API
+      const response = await fetch('/.netlify/functions/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId: conversationIdRef.current,
+          dispatchReport: formData,
+        }),
+      });
 
-    // Mock evaluation result
-    const mockResult = {
-      score: Math.floor(Math.random() * 3) + 3,
-      verdict: ['mixed', 'good', 'excellent'][Math.floor(Math.random() * 3)],
-      feedback:
-        'You identified the emergency type correctly and gathered most of the critical information. Consider asking more follow-up questions about the caller\'s exact location.',
-    };
+      if (!response.ok) {
+        throw new Error('Evaluation failed');
+      }
 
-    setLastResult(mockResult);
-    recordScore(mockResult.score);
+      const result = await response.json();
+      setLastResult(result);
+      recordScore(result.score);
+    } catch (error) {
+      console.error('Evaluation error:', error);
+      // Fallback to mock result if API fails
+      const mockResult = {
+        score: 3,
+        verdict: 'mixed',
+        feedback: 'Unable to evaluate at this time. Please try again.',
+      };
+      setLastResult(mockResult);
+      recordScore(mockResult.score);
+    }
   };
 
   const handleNextCall = () => {
