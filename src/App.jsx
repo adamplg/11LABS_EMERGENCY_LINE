@@ -128,6 +128,7 @@ function App() {
   } = useEmergencySession();
 
   const [lastResult, setLastResult] = useState(null);
+  const [autoStartNextCall, setAutoStartNextCall] = useState(false);
   const conversationIdRef = useRef(null);
 
   const handleSelectSimulation = (simId) => {
@@ -151,6 +152,7 @@ function App() {
   const handleStartCall = (elevenLabsConversationId) => {
     conversationIdRef.current = elevenLabsConversationId;
     const scenarioId = `scenario_${currentCall + 1}`;
+    setAutoStartNextCall(false);
     startCall(elevenLabsConversationId, scenarioId);
   };
 
@@ -206,6 +208,7 @@ function App() {
 
   const handleNextCall = () => {
     setLastResult(null);
+    setAutoStartNextCall(true);
     nextCall();
   };
 
@@ -255,6 +258,7 @@ function App() {
             onEndCall={handleEndCall}
             onSubmitDispatch={handleSubmitDispatch}
             isSubmitting={gameState === 'evaluating'}
+            autoStart={autoStartNextCall}
           />
         )}
 

@@ -29,7 +29,8 @@ export function CallPanel({
   onStartCall,
   onEndCall,
   onSubmitDispatch,
-  isSubmitting
+  isSubmitting,
+  autoStart
 }) {
   const isIdle = gameState === 'idle';
   const isInCall = gameState === 'inCall';
@@ -104,6 +105,13 @@ export function CallPanel({
       alert('Could not start call. Please allow microphone access and try again.');
     }
   }, [conversation, onStartCall, currentCall]);
+
+  // Auto-start call when coming from "Take Next Call"
+  useEffect(() => {
+    if (autoStart && isIdle) {
+      handleStartCall();
+    }
+  }, [autoStart, isIdle, handleStartCall]);
 
   const handleEndCall = useCallback(async () => {
     try {

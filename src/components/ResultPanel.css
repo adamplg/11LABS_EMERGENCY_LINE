@@ -155,16 +155,30 @@
   align-items: center;
   gap: 10px;
   padding: 12px 28px;
-  background: var(--success-green);
-  color: var(--bg-primary);
+  background: var(--alert-red);
+  color: var(--text-primary);
   font-size: 0.875rem;
   font-weight: 600;
   border-radius: var(--button-radius);
+  animation: pulse-button 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-button {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--alert-red-glow);
+    background: var(--alert-red);
+  }
+  50% {
+    box-shadow: 0 0 25px var(--alert-red-glow), 0 0 40px var(--alert-red-glow);
+    background: var(--alert-red-bright);
+  }
 }
 
 .next-button:hover {
-  background: #25c466;
+  background: var(--alert-red-bright);
   transform: translateY(-1px);
+  animation: none;
+  box-shadow: 0 0 20px var(--alert-red-glow);
 }
 
 .button-arrow {
@@ -283,11 +297,15 @@
   border: 1px solid var(--border-dim);
   border-radius: var(--panel-radius);
   padding: 12px;
-  max-height: 250px;
+  max-height: 300px;
+  min-height: 150px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-active) var(--bg-secondary);
 }
 
 .transcript-message {
