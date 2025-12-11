@@ -89,10 +89,11 @@ export function CallPanel({
       console.log('Starting ElevenLabs session...');
       const session = await conversation.startSession({ agentId: AGENT_ID });
       console.log('ElevenLabs session response:', session);
-      console.log('Session keys:', session ? Object.keys(session) : 'null');
-      console.log('Full session object:', JSON.stringify(session, null, 2));
-      // Pass the conversationId to the parent
-      const conversationId = session?.conversationId || session?.conversation_id || `conv_${Date.now()}`;
+      console.log('Session type:', typeof session);
+      // startSession returns the conversationId directly as a string
+      const conversationId = typeof session === 'string'
+        ? session
+        : (session?.conversationId || session?.conversation_id || `conv_${Date.now()}`);
       console.log('Using conversationId:', conversationId);
       onStartCall(conversationId);
     } catch (error) {
