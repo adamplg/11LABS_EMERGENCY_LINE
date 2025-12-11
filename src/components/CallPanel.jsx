@@ -190,29 +190,9 @@ export function CallPanel({
       {/* IDLE STATE */}
       {isIdle && !autoStart && (
         <div className="idle-state fade-in">
-          <div className="idle-content">
-            <div className="dispatch-icon">
-              <span className="icon-ring"></span>
-              <span className="icon-phone">📞</span>
-            </div>
-
-            <h2 className="idle-title">9-1-1 Call</h2>
-
-            <p className="idle-description">
-              Listen to the caller. Stay calm. Extract the <em>location</em>,{' '}
-              <em>situation</em>, and <em>severity</em>. Dispatch the right units.
-            </p>
-
-            <button className="answer-button" onClick={handleStartCall}>
-              <span className="btn-dot"></span>
-              Answer Incoming Call
-            </button>
-
-            <div className="status-indicator">
-              <span className="pulse-dot"></span>
-              INCOMING CALL
-            </div>
-          </div>
+          <button className="answer-button-large" onClick={handleStartCall}>
+            Answer Incoming Call
+          </button>
         </div>
       )}
 

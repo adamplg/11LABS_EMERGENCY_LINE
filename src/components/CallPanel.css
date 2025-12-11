@@ -112,6 +112,41 @@
   transform: translateY(-1px);
 }
 
+/* Large Answer Button - Red Pulsating */
+.answer-button-large {
+  padding: 24px 48px;
+  background: var(--alert-red);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: pulse-answer 1.5s ease-in-out infinite;
+  cursor: pointer;
+  border: none;
+}
+
+@keyframes pulse-answer {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--alert-red-glow), 0 0 40px var(--alert-red-glow);
+    background: var(--alert-red);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--alert-red-glow), 0 0 80px var(--alert-red-glow);
+    background: var(--alert-red-bright);
+    transform: scale(1.02);
+  }
+}
+
+.answer-button-large:hover {
+  animation: none;
+  background: var(--alert-red-bright);
+  box-shadow: 0 0 30px var(--alert-red-glow), 0 0 60px var(--alert-red-glow);
+  transform: scale(1.05);
+}
+
 .btn-dot {
   width: 8px;
   height: 8px;
