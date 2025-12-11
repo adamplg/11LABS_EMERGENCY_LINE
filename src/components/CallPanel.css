@@ -1,0 +1,229 @@
+.call-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  min-height: 400px;
+}
+
+/* Idle State */
+.idle-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  max-width: 600px;
+  text-align: center;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.instruction-text {
+  font-size: 1.125rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.instruction-text strong {
+  color: var(--warning-yellow);
+}
+
+.instruction-subtext {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+/* Emergency Button */
+.emergency-button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 64px;
+  background: linear-gradient(180deg, var(--alert-red) 0%, var(--alert-red-dim) 100%);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  border: 2px solid var(--alert-red);
+  cursor: pointer;
+  overflow: hidden;
+  animation: glow 2s ease-in-out infinite;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.emergency-button:hover {
+  transform: scale(1.02);
+}
+
+.emergency-button:active {
+  transform: scale(0.98);
+}
+
+.button-icon {
+  font-size: 2rem;
+  filter: grayscale(1) brightness(10);
+}
+
+.button-text {
+  position: relative;
+  z-index: 1;
+}
+
+.button-pulse {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  padding: 12px 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--button-radius);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.waiting {
+  background: var(--warning-yellow);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Call State */
+.call-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.call-active-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.call-rings {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  border: 2px solid var(--alert-red);
+  border-radius: 50%;
+  animation: ringExpand 2s ease-out infinite;
+}
+
+.ring-1 {
+  width: 60px;
+  height: 60px;
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  width: 80px;
+  height: 80px;
+  animation-delay: 0.4s;
+}
+
+.ring-3 {
+  width: 100px;
+  height: 100px;
+  animation-delay: 0.8s;
+}
+
+@keyframes ringExpand {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.phone-icon {
+  font-size: 2rem;
+  filter: grayscale(1) brightness(2);
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+.call-status {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--alert-red);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Widget Container */
+.call-widget-container {
+  width: 100%;
+  padding: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--panel-radius);
+}
+
+.call-widget-placeholder {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--border-active);
+  border-radius: var(--button-radius);
+  background: var(--bg-secondary);
+}
+
+.placeholder-text {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* End Call Button */
+.end-call-button {
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--alert-red);
+  font-size: 1rem;
+  border: 2px solid var(--alert-red);
+  border-radius: var(--button-radius);
+}
+
+.end-call-button:hover {
+  background: var(--alert-red);
+  color: white;
+}

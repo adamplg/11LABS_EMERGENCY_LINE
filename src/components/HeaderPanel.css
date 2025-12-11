@@ -1,0 +1,131 @@
+.header-panel {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-dim);
+  padding: 16px 24px;
+  position: relative;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+  filter: grayscale(1);
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--alert-red);
+  letter-spacing: 2px;
+}
+
+.header-center {
+  flex: 2;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+  letter-spacing: 0.5px;
+}
+
+.header-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.call-counter {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background: var(--bg-panel);
+  padding: 6px 12px;
+  border-radius: var(--button-radius);
+  border: 1px solid var(--border-dim);
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212, 0, 0, 0.15);
+  padding: 6px 12px;
+  border-radius: var(--button-radius);
+  border: 1px solid var(--alert-red-dim);
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--alert-red);
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+.live-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--alert-red);
+  letter-spacing: 1px;
+}
+
+.header-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--alert-red-dim) 20%,
+    var(--alert-red) 50%,
+    var(--alert-red-dim) 80%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header-left,
+  .header-right {
+    justify-content: center;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}
