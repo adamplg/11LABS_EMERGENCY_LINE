@@ -241,3 +241,71 @@
   border-color: var(--text-secondary);
   background: var(--bg-panel);
 }
+
+/* Transcript Section */
+.transcript-section {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.transcript-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px 0;
+}
+
+.transcript-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--panel-radius);
+  padding: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transcript-message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--bg-panel);
+  border-left: 3px solid var(--border-dim);
+}
+
+.transcript-message.caller {
+  border-left-color: var(--warning-yellow);
+}
+
+.transcript-message.dispatcher {
+  border-left-color: var(--info-blue);
+}
+
+.message-role {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.transcript-message.caller .message-role {
+  color: var(--warning-yellow);
+}
+
+.transcript-message.dispatcher .message-role {
+  color: var(--info-blue);
+}
+
+.message-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}

@@ -12,6 +12,7 @@ export function ResultPanel({
   score,
   verdict,
   feedback,
+  transcript,
   currentCall,
   totalCalls,
   averageScore,
@@ -45,6 +46,24 @@ export function ResultPanel({
           <div className="feedback-box">
             <p className="feedback-text">{feedback}</p>
           </div>
+
+          {/* Call Transcript */}
+          {transcript && transcript.length > 0 && (
+            <div className="transcript-section">
+              <h3 className="transcript-title">Call Transcript</h3>
+              <div className="transcript-box">
+                {transcript.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`transcript-message ${msg.role === 'Caller' ? 'caller' : 'dispatcher'}`}
+                  >
+                    <span className="message-role">{msg.role}</span>
+                    <span className="message-text">{msg.message}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="progress-info mono">
             <span>Call {currentCall} of {totalCalls} completed</span>

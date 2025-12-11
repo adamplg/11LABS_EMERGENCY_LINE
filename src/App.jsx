@@ -106,6 +106,7 @@ function App() {
             score={lastResult.score}
             verdict={lastResult.verdict}
             feedback={lastResult.feedback}
+            transcript={lastResult.transcript}
             currentCall={currentCall}
             totalCalls={totalCalls}
             averageScore={averageScore}

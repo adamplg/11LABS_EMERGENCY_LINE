@@ -23,18 +23,22 @@ export async function handler(event) {
     }
 
     // Fetch conversation transcript from ElevenLabs
-    const transcript = await fetchTranscript(conversationId);
+    const { transcript, transcriptFormatted } = await fetchTranscript(conversationId);
 
     // Use OpenAI to evaluate the dispatch report against the transcript
     const evaluation = await evaluateWithAI(transcript, dispatchReport);
 
+    // Include transcript in response
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       },
-      body: JSON.stringify(evaluation),
+      body: JSON.stringify({
+        ...evaluation,
+        transcript: transcriptFormatted,
+      }),
     };
   } catch (error) {
     console.error('Evaluation error:', error);
@@ -65,9 +69,18 @@ async function fetchTranscript(conversationId) {
   // The structure may vary - adjust based on actual API response
   const messages = data.transcript || data.messages || [];
 
-  return messages
+  // Raw transcript for AI evaluation
+  const transcript = messages
     .map((msg) => `${msg.role || msg.speaker}: ${msg.message || msg.text || msg.content}`)
     .join('\n');
+
+  // Formatted transcript for display (with proper labels)
+  const transcriptFormatted = messages.map((msg) => ({
+    role: msg.role === 'agent' || msg.speaker === 'agent' ? 'Caller' : 'You',
+    message: msg.message || msg.text || msg.content,
+  }));
+
+  return { transcript, transcriptFormatted };
 }
 
 async function evaluateWithAI(transcript, dispatchReport) {
