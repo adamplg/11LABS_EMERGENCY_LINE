@@ -43,33 +43,50 @@ export async function handler(event) {
   }
 }
 
-async function fetchTranscript(conversationId) {
+async function fetchTranscript(conversationId, retries = 3) {
   const url = `https://api.elevenlabs.io/v1/convai/conversations/${conversationId}`;
 
-  const response = await fetch(url, {
-    headers: {
-      'xi-api-key': ELEVENLABS_API_KEY,
-    },
-  });
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const response = await fetch(url, {
+      headers: {
+        'xi-api-key': ELEVENLABS_API_KEY,
+      },
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to fetch transcript: ${response.status} - ${errorText}`);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to fetch transcript: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    // Check if conversation is still processing
+    if (data.status === 'processing' || data.status === 'in-progress') {
+      if (attempt < retries) {
+        // Wait 2 seconds before retrying
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        continue;
+      }
+    }
+
+    const messages = data.transcript || [];
+
+    // Filter out empty messages
+    const validMessages = messages.filter(msg => msg.message && msg.message.trim());
+
+    const transcript = validMessages
+      .map((msg) => `${msg.role}: ${msg.message}`)
+      .join('\n');
+
+    const transcriptFormatted = validMessages.map((msg) => ({
+      role: msg.role === 'agent' ? 'Caller' : 'You',
+      message: msg.message,
+    }));
+
+    return { transcript, transcriptFormatted };
   }
 
-  const data = await response.json();
-  const messages = data.transcript || data.messages || [];
-
-  const transcript = messages
-    .map((msg) => `${msg.role || msg.speaker}: ${msg.message || msg.text || msg.content}`)
-    .join('\n');
-
-  const transcriptFormatted = messages.map((msg) => ({
-    role: msg.role === 'agent' || msg.speaker === 'agent' ? 'Caller' : 'You',
-    message: msg.message || msg.text || msg.content,
-  }));
-
-  return { transcript, transcriptFormatted };
+  return { transcript: '', transcriptFormatted: [] };
 }
 
 async function evaluateWithAI(transcript, dispatchReport) {
