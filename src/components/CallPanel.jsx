@@ -239,7 +239,7 @@ export function CallPanel({
                       className={`mute-btn ${isMuted ? 'muted' : ''}`}
                       onClick={handleMuteToggle}
                     >
-                      {isMuted ? '🔇' : '🎤'}
+                      {isMuted ? 'UNMUTE' : 'MUTE MIC'}
                     </button>
                     <button className="end-call-btn" onClick={handleEndCall}>
                       End Call
