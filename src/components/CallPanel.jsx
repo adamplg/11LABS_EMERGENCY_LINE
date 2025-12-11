@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useConversation } from '@elevenlabs/react';
 import './CallPanel.css';
 
@@ -48,6 +48,7 @@ export function CallPanel({
   const [errors, setErrors] = useState({});
   const [callDuration, setCallDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
+  const autoStartAttempted = useRef(false);
 
   // ElevenLabs Conversation hook
   const conversation = useConversation({
@@ -108,8 +109,18 @@ export function CallPanel({
 
   // Auto-start call when coming from "Take Next Call"
   useEffect(() => {
-    if (autoStart && isIdle) {
-      handleStartCall();
+    if (autoStart && isIdle && !autoStartAttempted.current) {
+      autoStartAttempted.current = true;
+      // Small delay to ensure conversation hook is ready
+      const timer = setTimeout(() => {
+        console.log('Auto-starting call...');
+        handleStartCall();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+    // Reset the ref when autoStart becomes false
+    if (!autoStart) {
+      autoStartAttempted.current = false;
     }
   }, [autoStart, isIdle, handleStartCall]);
 
