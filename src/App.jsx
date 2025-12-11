@@ -5,7 +5,78 @@ import { CallPanel } from './components/CallPanel';
 import { ResultPanel } from './components/ResultPanel';
 import './App.css';
 
+// Simulation options for the landing page
+const SIMULATIONS = [
+  {
+    id: 'emergency',
+    title: 'Emergency Responder',
+    description: 'Handle 911 calls as a dispatcher. Extract critical info and dispatch the right units.',
+    icon: '🚨',
+    available: true,
+  },
+  {
+    id: 'hostage',
+    title: 'Hostage Negotiation',
+    description: 'Negotiate with hostage-takers. Build rapport and secure safe outcomes.',
+    icon: '🎯',
+    available: false,
+  },
+  {
+    id: 'courtroom',
+    title: 'Courtroom Debate',
+    description: 'Present arguments and cross-examine witnesses in high-stakes trials.',
+    icon: '⚖️',
+    available: false,
+  },
+];
+
+function LandingPage({ onSelectSimulation }) {
+  return (
+    <div className="landing-page">
+      <div className="landing-content">
+        <div className="landing-header">
+          <div className="landing-icon">🎙️</div>
+          <h1 className="landing-title">High-Stakes Conversation Simulator</h1>
+          <p className="landing-subtitle">Choose a simulation to begin training</p>
+        </div>
+
+        <div className="simulations-grid">
+          {SIMULATIONS.map((sim) => (
+            <button
+              key={sim.id}
+              className={`simulation-card ${sim.available ? 'available' : 'locked'}`}
+              onClick={() => sim.available && onSelectSimulation(sim.id)}
+              disabled={!sim.available}
+            >
+              <div className="sim-icon-wrapper">
+                <span className="sim-icon">{sim.icon}</span>
+                {!sim.available && <span className="lock-icon">🔒</span>}
+              </div>
+              <div className="sim-info">
+                <h3 className="sim-title">{sim.title}</h3>
+                <p className="sim-description">{sim.description}</p>
+                {!sim.available && (
+                  <span className="coming-soon-badge">Coming Soon</span>
+                )}
+                {sim.available && (
+                  <span className="play-badge">Start Training →</span>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="landing-footer">
+          <p>Powered by AI voice technology</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
+  const [currentScreen, setCurrentScreen] = useState('landing'); // 'landing' or 'game'
+
   const {
     gameState,
     currentCall,
@@ -23,6 +94,18 @@ function App() {
 
   const [lastResult, setLastResult] = useState(null);
   const conversationIdRef = useRef(null);
+
+  const handleSelectSimulation = (simId) => {
+    if (simId === 'emergency') {
+      setCurrentScreen('game');
+    }
+  };
+
+  const handleBackToLanding = () => {
+    setLastResult(null);
+    resetSession();
+    setCurrentScreen('landing');
+  };
 
   const handleStartCall = (elevenLabsConversationId) => {
     conversationIdRef.current = elevenLabsConversationId;
@@ -90,6 +173,16 @@ function App() {
     resetSession();
   };
 
+  // Show landing page
+  if (currentScreen === 'landing') {
+    return (
+      <div className="app">
+        <LandingPage onSelectSimulation={handleSelectSimulation} />
+      </div>
+    );
+  }
+
+  // Show game
   const showCallPanel = ['idle', 'inCall', 'reportPending', 'evaluating'].includes(gameState);
   const showResultPanel = ['result', 'complete'].includes(gameState);
 
@@ -100,6 +193,7 @@ function App() {
         totalCalls={totalCalls}
         gameState={gameState}
         onReset={handleRestart}
+        onBackToMenu={handleBackToLanding}
       />
 
       <main className="main-content">
@@ -127,6 +221,7 @@ function App() {
             onRestart={handleRestart}
             isComplete={gameState === 'complete'}
             badge={badge}
+            onBackToMenu={handleBackToLanding}
           />
         )}
 
@@ -142,6 +237,7 @@ function App() {
             onRestart={handleRestart}
             isComplete={true}
             badge={badge}
+            onBackToMenu={handleBackToLanding}
           />
         )}
       </main>

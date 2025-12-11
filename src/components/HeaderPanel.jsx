@@ -1,6 +1,6 @@
 import './HeaderPanel.css';
 
-export function HeaderPanel({ currentCall, totalCalls, gameState, onReset }) {
+export function HeaderPanel({ currentCall, totalCalls, gameState, onReset, onBackToMenu }) {
   const handleHomeClick = () => {
     if (gameState !== 'idle') {
       onReset?.();
@@ -30,6 +30,11 @@ export function HeaderPanel({ currentCall, totalCalls, gameState, onReset }) {
     <header className="header-panel">
       <div className="header-content">
         <div className="header-left">
+          {onBackToMenu && (
+            <button className="back-btn" onClick={onBackToMenu} title="Back to simulations">
+              ← Menu
+            </button>
+          )}
           <button className="logo" onClick={handleHomeClick} title="Return to home">
             <div className="logo-badge">
               <span className="logo-icon">☎</span>
