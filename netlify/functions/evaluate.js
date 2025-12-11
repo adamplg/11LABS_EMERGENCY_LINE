@@ -173,7 +173,6 @@ Respond with ONLY valid JSON in this exact format:
           content: prompt,
         },
       ],
-      temperature: 0.3,
     }),
   });
 
