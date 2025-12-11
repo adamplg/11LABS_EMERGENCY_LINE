@@ -173,7 +173,17 @@ export function CallPanel({
   };
 
   const handleSubmit = () => {
-    if (validate()) {
+    console.log('Submit button clicked');
+    console.log('gameState:', gameState);
+    console.log('isInCall:', isInCall);
+    console.log('isEvaluating:', isEvaluating);
+    console.log('formData:', formData);
+
+    const isValid = validate();
+    console.log('Validation result:', isValid);
+    console.log('Errors:', errors);
+
+    if (isValid) {
       onSubmitDispatch(formData);
     }
   };
@@ -281,6 +291,7 @@ export function CallPanel({
                         disabled={isEvaluating}
                         className={errors.callerName ? 'error' : ''}
                       />
+                      {errors.callerName && <span className="error-msg">{errors.callerName}</span>}
                     </div>
                     <div className="form-field">
                       <label>Severity</label>
@@ -300,6 +311,7 @@ export function CallPanel({
                           </button>
                         ))}
                       </div>
+                      {errors.severity && <span className="error-msg">{errors.severity}</span>}
                     </div>
                   </div>
 
@@ -314,6 +326,7 @@ export function CallPanel({
                       disabled={isEvaluating}
                       className={errors.address ? 'error' : ''}
                     />
+                    {errors.address && <span className="error-msg">{errors.address}</span>}
                   </div>
 
                   <div className="form-field full-width">
@@ -327,6 +340,7 @@ export function CallPanel({
                       className={errors.situation ? 'error' : ''}
                       rows={2}
                     />
+                    {errors.situation && <span className="error-msg">{errors.situation}</span>}
                   </div>
 
                   <div className="form-field full-width">
@@ -346,6 +360,7 @@ export function CallPanel({
                         </button>
                       ))}
                     </div>
+                    {errors.units && <span className="error-msg">{errors.units}</span>}
                   </div>
                 </div>
               </div>
@@ -385,6 +400,10 @@ export function CallPanel({
                   'Submit Dispatch Report'
                 )}
               </button>
+              {/* Debug info - remove after testing */}
+              <div style={{ fontSize: '10px', color: '#666', marginTop: '4px', textAlign: 'center' }}>
+                [Debug: gameState={gameState}, disabled={String(isInCall || isEvaluating)}]
+              </div>
             </div>
           </div>
         </div>

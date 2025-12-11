@@ -391,8 +391,10 @@
 }
 
 .error-msg {
-  font-size: 0.5625rem;
-  color: #8B3A42;
+  font-size: 0.6875rem;
+  color: #ff6b6b;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 /* Severity Buttons */
